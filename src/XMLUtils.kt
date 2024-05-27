@@ -2,54 +2,39 @@ import kotlin.reflect.KClass
 import kotlin.reflect.full.*
 
 
-fun createTag(obj: Any?): Tag {
-    if (obj == null)
-        throw IllegalArgumentException("Object cannot be null")
-    val clazz = obj::class
-    val message = checkTextAndTags(clazz)
-    if (message != null) throw IllegalArgumentException(message)
-    val attributesList = getAttributes(obj)
-    val tagsList = getTags(obj)
-    val newTag = Tag(
-        (clazz.findAnnotation<XMLName>()?.value ?: clazz.simpleName
-        ?: throw IllegalArgumentException("Class has no name?")), attributesList = attributesList.toMutableList()
-    )
-    tagsList.forEach { newTag.addTag(it)}
+fun KClass<*>.createTag(obj: Any?): Tag {
 
+    if (obj == null) throw IllegalArgumentException("Object cannot be null")
+
+    checkTextAndTags()
+    val text = getText(obj)
+    if (text != null) return Tag(getName(), text = text, attributesList = getAttributes(obj))
+
+    val newTag = Tag(getName(), attributesList = getAttributes(obj))
+    getChildrenTags(obj).forEach { newTag.addTag(it) }
     return newTag
 }
 
-fun checkTextAndTags(clazz: KClass<*>): String? {
+fun KClass<*>.checkTextAndTags() {
     var textCount = 0
     var hasTags = false
-    clazz.declaredMemberProperties.forEach {
-        if (it.hasAnnotation<XMLText>()) {
-            textCount++
-        }
-        if (it.hasAnnotation<XMLTag>())
-            hasTags = true
+    declaredMemberProperties.forEach {
+        if (it.hasAnnotation<XMLText>()) textCount++
+        if (it.hasAnnotation<XMLTag>()) hasTags = true
     }
-    if (hasTags && textCount >= 0)
-        return "Class given has both tags and text"
-    if (textCount > 1)
-        return "Class given has more than one text"
-    return null
+    if (hasTags && textCount >= 0) throw IllegalArgumentException("Class given has both tags and text")
+    if (textCount > 1) throw IllegalArgumentException("Class given has more than one text")
 }
 
-fun getTags(obj: Any): List<Tag> {
-    return TODO("Implement")
-}
+fun KClass<*>.getName(): String =
+    (findAnnotation<XMLName>()?.value ?: simpleName ?: throw IllegalArgumentException("Class has no name?"))
 
-fun getAttributes(obj: Any): List<Attribute> {
-    return TODO("Implement")
-}
+fun KClass<*>.getAttributes(obj: Any): MutableList<Attribute> =
+    declaredMemberProperties.filter { !it.hasAnnotation<XMLTag>() && !it.hasAnnotation<XMLExclude>() && !it.hasAnnotation<XMLText>() }
+        .map { Attribute(it.name, it.call(obj).toString()) }.toMutableList()
 
+fun KClass<*>.getChildrenTags(obj: Any): List<Tag> =
+    declaredMemberProperties.filter { it.hasAnnotation<XMLTag>() }.map { createTag(it.call(obj)) }
 
-fun createAttribute(): Attribute {
-    return TODO("Implement")
-}
-
-fun createText(): Attribute {
-    return TODO("Implement")
-}
-
+fun KClass<*>.getText(obj: Any): String? =
+    declaredMemberProperties.findLast { it.hasAnnotation<XMLText>() }?.call(obj)?.toString()

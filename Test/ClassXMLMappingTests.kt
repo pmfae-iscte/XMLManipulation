@@ -9,11 +9,11 @@ class ClassXMLMappingTests {
         class TestClass1(@XMLText val text:String, @XMLTag val tag: String)
         assertEquals(
             "Class given has both tags and text",
-        assertThrows<IllegalArgumentException> { createTag(TestClass1("","")) }.message)
+        assertThrows<IllegalArgumentException> { TestClass1::class.createTag(TestClass1("","")) }.message)
         class TestClass2(@XMLText val text1:String, @XMLText val text2: String)
         assertEquals(
             "Class given has more than one text",
-            assertThrows<IllegalArgumentException> { createTag(TestClass2("","")) }.message)
+            assertThrows<IllegalArgumentException> { TestClass2::class.createTag(TestClass2("","")) }.message)
     }
 
     @Test
@@ -21,9 +21,10 @@ class ClassXMLMappingTests {
         @XMLName("componente")
         class ComponenteAvaliacao(val nome: String, val peso: Int)
         val c = ComponenteAvaliacao("Quizzes", 20)
-        println(createTag(c).prettyPrint)
+        println(ComponenteAvaliacao::class.createTag(c).prettyPrint)
         class FUC(
             val codigo: String,
+
             val nome: String,
             val ects: Double,
             val observacoes: String,
@@ -35,7 +36,7 @@ class ClassXMLMappingTests {
                 ComponenteAvaliacao("Projeto", 80)
             )
         )
-        println(createTag(f).prettyPrint)
+        println(FUC::class.createTag(f).prettyPrint)
     }
 
 
