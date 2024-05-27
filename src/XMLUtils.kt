@@ -1,8 +1,5 @@
 import kotlin.reflect.KClass
-import kotlin.reflect.full.declaredMemberProperties
-import kotlin.reflect.full.findAnnotation
-import kotlin.reflect.full.findAnnotations
-import kotlin.reflect.full.hasAnnotation
+import kotlin.reflect.full.*
 
 
 fun createTag(obj: Any?): Tag {
@@ -17,6 +14,7 @@ fun createTag(obj: Any?): Tag {
         (clazz.findAnnotation<XMLName>()?.value ?: clazz.simpleName
         ?: throw IllegalArgumentException("Class has no name?")), attributesList = attributesList.toMutableList()
     )
+    tagsList.forEach { newTag.addTag(it)}
 
     return newTag
 }
@@ -25,8 +23,9 @@ fun checkTextAndTags(clazz: KClass<*>): String? {
     var textCount = 0
     var hasTags = false
     clazz.declaredMemberProperties.forEach {
-        if (it.hasAnnotation<XMLText>())
+        if (it.hasAnnotation<XMLText>()) {
             textCount++
+        }
         if (it.hasAnnotation<XMLTag>())
             hasTags = true
     }

@@ -1,6 +1,20 @@
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 
 class ClassXMLMappingTests {
+
+    @Test
+    fun check_if_cant_have_both_text_and_tags_and_if_cant_have_more_than_one_text(){
+        class TestClass1(@XMLText val text:String, @XMLTag val tag: String)
+        assertEquals(
+            "Class given has both tags and text",
+        assertThrows<IllegalArgumentException> { createTag(TestClass1("","")) }.message)
+        class TestClass2(@XMLText val text1:String, @XMLText val text2: String)
+        assertEquals(
+            "Class given has more than one text",
+            assertThrows<IllegalArgumentException> { createTag(TestClass2("","")) }.message)
+    }
 
     @Test
     fun createTagTest() {
