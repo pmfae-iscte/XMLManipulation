@@ -8,16 +8,17 @@ fun createTag(obj: Any): Tag {
 }
 
 fun createSubTag(obj: Any, name: String): Tag {
-    val clazz = obj::class
 
     val classAttributes = getAttributePerXMLElement(obj)
-
     checkTextAndTags(classAttributes)
 
-    if (classAttributes["Text"] != null) return Tag(name, , attributesList = getAttributes(obj))
-    val newTag = Tag(name, attributesList = getAttributes(obj))
-    getChildrenTags(obj).forEach { newTag.addTag(it) }
-    getTextTags(obj).forEach { newTag.addTag(it) }
+    if (classAttributes["Text"] != null) return Tag(
+        name, getText(obj, classAttributes["Text"]), attributesList = getAttributes(obj, classAttributes["Attribute"])
+    )
+    val newTag = Tag(name, attributesList = getAttributes(obj, classAttributes["Attribute"]))
+    getChildrenTags(obj, classAttributes["Tag"]).forEach { newTag.addTag(it) }
+    getTextTags(obj, classAttributes["TextTag"]).forEach { newTag.addTag(it) }
+    getListTags(obj, classAttributes["ListTag"]).forEach { newTag.addTag(it) }
     return newTag
 }
 
@@ -42,28 +43,33 @@ fun KClass<*>.getName(): String =
 
 fun KProperty<*>.getName(): String = findAnnotation<XMLName>()?.value ?: name
 
-fun getAttributes(obj: Any): MutableList<Attribute> =
-    obj::class.declaredMemberProperties.filter { it.hasAnnotation<XMLAttribute>() }
-        .map { Attribute(it.name, it.call(obj).toString()) }.toMutableList()
+fun getAttributes(obj: Any, kProperties: MutableList<KProperty<*>>?): MutableList<Attribute> =
+    kProperties?.map { Attribute(it.name, it.call(obj).toString()) }?.toMutableList() ?: mutableListOf()
 
 
-fun getText(obj: Any): String? =
-    obj::class.declaredMemberProperties.findLast { it.hasAnnotation<XMLText>() }?.call(obj)?.toString()
+fun getText(obj: Any, kProperties: MutableList<KProperty<*>>?): String = kProperties!![0].call(obj).toString()
 
 
-fun getChildrenTags(obj: Any): List<Tag> {
-
-
-    return obj::class.declaredMemberProperties.filter { it.hasAnnotation<XMLTag>() && it.call(obj) != null }
-        .map { createSubTag(it.call(obj)!!, it.getName()) }
+fun getChildrenTags(obj: Any, kProperties: MutableList<KProperty<*>>?): List<Tag> {
+    return kProperties?.map { createSubTag(it.call(obj)!!, it.getName()) } ?: listOf()
 }
 
-fun getTextTags(obj: Any): List<Tag> {
-    return obj::class.declaredMemberProperties.filter { it.hasNoXMLAnotation() }.map { createTextTag(it, obj) }
+fun getTextTags(obj: Any, kProperties: MutableList<KProperty<*>>?): List<Tag> {
+    return kProperties?.map { Tag(it.name, text = it.call(obj).toString()) } ?: listOf()
 }
 
-fun createTextTag(p: KProperty<*>, obj: Any): Tag {
-    return Tag(p.name, text = p.call(obj).toString())
+fun getListTags(obj: Any, kProperties: MutableList<KProperty<*>>?): List<Tag> {
+    val tags: MutableList<Tag> = mutableListOf()
+    kProperties?.forEach {
+        val element = it.call(obj)
+        if (element is Collection<*> || element is Array<*>) {
+            val t = Tag(it.getName())
+            val c: Collection<*> = (if (element is Array<*>) element.toList() else element) as Collection<*>
+            c.forEach { item -> if (item != null) t.addTag(createTag(item)) }
+            tags.add(t)
+        }
+    }
+    return tags
 }
 
 

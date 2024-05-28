@@ -19,14 +19,15 @@ annotation class XMLTextTag
 @Target(AnnotationTarget.PROPERTY)
 annotation class XMLTagList
 
-fun KProperty<*>.hasNoXMLAnotation() =
-    !hasAnnotation<XMLTextTag>() && !hasAnnotation<XMLAttribute>() && !hasAnnotation<XMLText>() && !hasAnnotation<XMLTag>() && !hasAnnotation<XMLTagList>()
+//fun KProperty<*>.hasNoXMLAnotation() =
+//    !hasAnnotation<XMLTextTag>() && !hasAnnotation<XMLAttribute>() && !hasAnnotation<XMLText>() && !hasAnnotation<XMLTag>() && !hasAnnotation<XMLTagList>()
 
 fun KProperty<*>.findXMLAnnotation(): String {
     return if (hasAnnotation<XMLAttribute>()) "Attribute"
     else if (hasAnnotation<XMLText>()) "Text"
     else if (hasAnnotation<XMLTag>()) "Tag"
     else if (hasAnnotation<XMLTextTag>()) "TextTag"
-    else if (hasAnnotation<XMLTagList>()) "TagList"
+    else if (hasAnnotation<XMLTagList>()) "ListTag"
+
     else "Exclude"
 }
