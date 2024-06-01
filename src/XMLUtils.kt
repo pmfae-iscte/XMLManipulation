@@ -44,7 +44,7 @@ fun KClass<*>.getName(): String =
 fun KProperty<*>.getName(): String = findAnnotation<XMLName>()?.value ?: name
 
 fun getAttributes(obj: Any, kProperties: MutableList<KProperty<*>>?): MutableList<Attribute> =
-    kProperties?.map { Attribute(it.name, it.call(obj).toString()) }?.toMutableList() ?: mutableListOf()
+    kProperties?.map { Attribute(it.getName(), it.call(obj).toString()) }?.toMutableList() ?: mutableListOf()
 
 
 fun getText(obj: Any, kProperties: MutableList<KProperty<*>>?): String = kProperties!![0].call(obj).toString()
@@ -55,7 +55,7 @@ fun getChildrenTags(obj: Any, kProperties: MutableList<KProperty<*>>?): List<Tag
 }
 
 fun getTextTags(obj: Any, kProperties: MutableList<KProperty<*>>?): List<Tag> {
-    return kProperties?.map { Tag(it.name, text = it.call(obj).toString()) } ?: listOf()
+    return kProperties?.map { Tag(it.getName(), text = it.call(obj).toString()) } ?: listOf()
 }
 
 fun getListTags(obj: Any, kProperties: MutableList<KProperty<*>>?): List<Tag> {

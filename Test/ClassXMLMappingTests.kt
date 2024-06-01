@@ -24,8 +24,11 @@ class ClassXMLMappingTests {
         class ComponenteAvaliacao(@XMLAttribute val nome: String, @XMLAttribute val peso: Int)
 
         val c = ComponenteAvaliacao("Quizzes", 20)
-//        println(createTag(c).prettyPrint)
+
+        //        println(createTag(c).prettyPrint)
+        @XMLName("fuc")
         class FUC(
+            @XMLName("code")
             @XMLAttribute
             val codigo: String,
             @XMLTextTag
