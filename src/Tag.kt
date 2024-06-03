@@ -96,30 +96,36 @@ data class Tag(
     }
 
 
-    fun removeTag(tag: Tag?) {
+    fun removeTag(tag: Tag?): Tag? {
         tag?.parent = null
         childrenList.remove(tag)
+        return tag
     }
 
-    fun removeTag(tagName: String) {
+    fun removeTag(tagName: String): Tag? {
         val tag = childrenList.find { it.name == tagName }
         tag?.parent = null
         childrenList.remove(tag)
+        return tag
     }
 
-    fun removeTag(tagName: String, nth: Int) {
+    fun removeTag(tagName: String, nth: Int): Tag {
         val tags = childrenList.filter { it.name == tagName }
+        val tag: Tag
         if (nth > tags.size) throw IllegalArgumentException("Theres only ${tags.size} and was asked to remove the $nth")
         else {
+            tag = tags[nth - 1]
             tags[nth - 1].parent = null
             childrenList.remove(tags[nth - 1])
         }
+        return tag
     }
 
-    fun removeLastTag(tagName: String) {
+    fun removeLastTag(tagName: String): Tag? {
         val tag = childrenList.findLast { it.name == tagName }
         tag?.parent = null
         childrenList.remove(tag)
+        return tag
     }
 
     fun accept(v: Visitor) {

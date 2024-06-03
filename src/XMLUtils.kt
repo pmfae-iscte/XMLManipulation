@@ -3,13 +3,22 @@ import kotlin.reflect.KProperty
 import kotlin.reflect.full.*
 
 
+interface StringModifier { //as of now cannot be inner class!!
+    fun modify(o: Any?): String = o.toString()
+}
+
+interface Adapter {
+    fun adapt(t: Tag): Tag
+}
+
 fun createTag(obj: Any): Tag {
     return createSubTag(obj, obj::class.getName())
 }
 
 fun createSubTag(obj: Any, name: String): Tag {
 
-    val classAttributes = getAttributePerXMLElement(obj)
+    val clazz = obj::class
+    val classAttributes = getAttributePerXMLElement(clazz)
     checkTextAndTags(classAttributes)
 
     if (classAttributes["Text"] != null) return Tag(
@@ -20,12 +29,20 @@ fun createSubTag(obj: Any, name: String): Tag {
     getTextTags(obj, classAttributes["TextTag"]).forEach { newTag.addTag(it) }
     getListTags(obj, classAttributes["ListTag"]).forEach { newTag.addTag(it) }
 
-    return newTag
+
+
+    return if (clazz.hasAnnotation<XmlAdapter>()) {
+        val adapter = clazz.findAnnotation<XmlAdapter>()!!.adapter
+        if (adapter.isInner)
+            adapter.primaryConstructor!!.call(obj).adapt(newTag)
+        else
+            adapter.createInstance().adapt(newTag)
+    } else newTag
 }
 
-fun getAttributePerXMLElement(obj: Any): Map<String, MutableList<KProperty<*>>> {
+fun getAttributePerXMLElement(clazz: KClass<*>): Map<String, MutableList<KProperty<*>>> {
     val map = mutableMapOf<String, MutableList<KProperty<*>>>()
-    obj::class.declaredMemberProperties.forEach {
+    clazz.declaredMemberProperties.forEach {
         if (map[it.findXMLAnnotation()] == null) map[it.findXMLAnnotation()] = mutableListOf(it)
         else map[it.findXMLAnnotation()]!!.add(it)
     }
@@ -49,9 +66,9 @@ fun getAttributes(obj: Any, kProperties: MutableList<KProperty<*>>?): MutableLis
         it.getName(), if (it.hasAnnotation<XmlString>()) {
             val modifierClass = it.findAnnotation<XmlString>()!!.stringModifier
             if (modifierClass.isInner)
-                it.findAnnotation<XmlString>()!!.stringModifier.primaryConstructor!!.call(obj).modify(it.call(obj))
+                modifierClass.primaryConstructor!!.call(obj).modify(it.call(obj))
             else
-                it.findAnnotation<XmlString>()!!.stringModifier.createInstance().modify(it.call(obj))
+                modifierClass.createInstance().modify(it.call(obj))
         } else it.call(obj).toString()
     )
 }?.toMutableList() ?: mutableListOf()

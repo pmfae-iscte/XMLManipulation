@@ -22,6 +22,9 @@ annotation class XmlTagList
 
 @Target(AnnotationTarget.PROPERTY)
 annotation class XmlString(val stringModifier: KClass<out StringModifier>)
+
+@Target(AnnotationTarget.CLASS)
+annotation class XmlAdapter(val adapter: KClass<out Adapter>)
 //fun KProperty<*>.hasNoXMLAnotation() =
 //    !hasAnnotation<XMLTextTag>() && !hasAnnotation<XMLAttribute>() && !hasAnnotation<XMLText>() && !hasAnnotation<XMLTag>() && !hasAnnotation<XMLTagList>()
 
