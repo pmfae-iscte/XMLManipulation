@@ -19,6 +19,7 @@ fun createSubTag(obj: Any, name: String): Tag {
     getChildrenTags(obj, classAttributes["Tag"]).forEach { newTag.addTag(it) }
     getTextTags(obj, classAttributes["TextTag"]).forEach { newTag.addTag(it) }
     getListTags(obj, classAttributes["ListTag"]).forEach { newTag.addTag(it) }
+
     return newTag
 }
 
@@ -39,12 +40,21 @@ fun checkTextAndTags(attributes: Map<String, MutableList<KProperty<*>>>) {
 }
 
 fun KClass<*>.getName(): String =
-    findAnnotation<XMLName>()?.value ?: simpleName ?: throw IllegalArgumentException("Class has no name?")
+    findAnnotation<XmlName>()?.value ?: simpleName ?: throw IllegalArgumentException("Class has no name?")
 
-fun KProperty<*>.getName(): String = findAnnotation<XMLName>()?.value ?: name
+fun KProperty<*>.getName(): String = findAnnotation<XmlName>()?.value ?: name
 
-fun getAttributes(obj: Any, kProperties: MutableList<KProperty<*>>?): MutableList<Attribute> =
-    kProperties?.map { Attribute(it.getName(), it.call(obj).toString()) }?.toMutableList() ?: mutableListOf()
+fun getAttributes(obj: Any, kProperties: MutableList<KProperty<*>>?): MutableList<Attribute> = kProperties?.map {
+    Attribute(
+        it.getName(), if (it.hasAnnotation<XmlString>()) {
+            val modifierClass = it.findAnnotation<XmlString>()!!.stringModifier
+            if (modifierClass.isInner)
+                it.findAnnotation<XmlString>()!!.stringModifier.primaryConstructor!!.call(obj).modify(it.call(obj))
+            else
+                it.findAnnotation<XmlString>()!!.stringModifier.createInstance().modify(it.call(obj))
+        } else it.call(obj).toString()
+    )
+}?.toMutableList() ?: mutableListOf()
 
 
 fun getText(obj: Any, kProperties: MutableList<KProperty<*>>?): String = kProperties!![0].call(obj).toString()
@@ -64,8 +74,9 @@ fun getListTags(obj: Any, kProperties: MutableList<KProperty<*>>?): List<Tag> {
         val element = it.call(obj)
         if (element is Collection<*> || element is Array<*>) {
             val t = Tag(it.getName())
-            val c: Collection<*> = (if (element is Array<*>) element.toList() else element) as Collection<*>
-            c.forEach { item -> if (item != null) t.addTag(createTag(item)) }
+            ((if (element is Array<*>) element.toList() else element) as Collection<*>).forEach { item ->
+                if (item != null) t.addTag(createTag(item))
+            }
             tags.add(t)
         }
     }
