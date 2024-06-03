@@ -71,13 +71,14 @@ class ClassXMLMappingTests {
     }
 
     @Test
-    fun createtagusingadapter() {
+    fun createTagUsingAdapter() {
 
         class UpperCase : StringModifier {
             override fun modify(o: Any?): String {
                 return o.toString().uppercase()
             }
         }
+
         @XmlName("componente")
         class ComponenteAvaliacao(
             @XmlString(UpperCase::class) @XmlAttribute val nome: String,
@@ -95,7 +96,7 @@ class ClassXMLMappingTests {
                 val ects = t.removeTag("ects")
                 t.addTag(ects!!)
                 val avaliacao = t.removeTag("avaliacao")
-                avaliacao!!.children.forEach{t.addTag(it)}
+                avaliacao!!.children.forEach { t.addTag(it) }
                 return t
             }
         }
@@ -109,8 +110,6 @@ class ClassXMLMappingTests {
             val observacoes: String,
             @XmlTagList val avaliacao: List<ComponenteAvaliacao>
         )
-
-
 
         val f = FUC(
             "M4310", "Programação Avançada", 6.0, "la la...", listOf(
@@ -127,6 +126,4 @@ class ClassXMLMappingTests {
             createTag(f).prettyPrint
         )
     }
-
-
 }

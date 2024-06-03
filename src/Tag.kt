@@ -66,7 +66,7 @@ data class Tag(
 
     fun setAttribute(oldAttribute: Attribute, newAttribute: Attribute) {
         if (attributesList.find { it == oldAttribute } == null) throw NoSuchElementException("No such attribute \"${oldAttribute.name}\" found")
-        attributesList[attributesList.indexOfFirst { it.name == oldAttribute.name }] =newAttribute
+        attributesList[attributesList.indexOfFirst { it.name == oldAttribute.name }] = newAttribute
     }
 
     fun setAttribute(oldAttributeName: String, newAttributeName: String, attributeValue: String) {

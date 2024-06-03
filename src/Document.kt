@@ -5,7 +5,6 @@ class Document(private val mainTag: Tag, version: String = "1.0", encoding: Stri
 
     fun getXML() = "<?xml $version $encoding?>\n${mainTag.prettyPrint}"
 
-
     fun getXMLFragment(xpath: String): List<Tag> {
         if (xpath == "")
             return listOf(mainTag)
@@ -98,5 +97,4 @@ class Document(private val mainTag: Tag, version: String = "1.0", encoding: Stri
         }
         mainTag.accept(removeAttribute)
     }
-
 }
