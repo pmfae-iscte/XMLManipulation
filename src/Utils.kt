@@ -3,10 +3,16 @@ import kotlin.reflect.KProperty
 import kotlin.reflect.full.*
 
 
+/**
+ * This interface  can be used by the [createTag] allowing a transformation of the `String` to be the [Attribute.value]. It should be used as the argument for the [XmlString] annotation.
+ */
 interface StringModifier {
     fun modify(o: Any?): String = o.toString()
 }
 
+/**
+ * This interface can be used by the [createTag] allowing a personalization of the [Tag] created from an instance of a `class`. It should be used as the argument for the [XmlAdapter] annotation.
+ */
 interface Adapter {
     fun adapt(t: Tag): Tag
 }

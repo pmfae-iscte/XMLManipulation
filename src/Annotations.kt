@@ -42,14 +42,15 @@ annotation class XmlTextTag
 annotation class XmlTagList
 
 /**
- * This annotation allows a transformation of the `String` to be the [Attribute.value]. It should be used with [XmlAttribute].
- * @property [stringModifier] [KClass] of [StringModifier] interface that has a function [StringModifier.modify] the return the transformation of the class's attribute data.
+ * This annotation allows a transformation of the `String` to be the [Attribute.value]. It should be used with the [XmlAttribute] annotation.
+ * @property [stringModifier] [KClass] of [StringModifier] interface that has a function [StringModifier.modify] that returns the transformation of the class's attribute data.
  */
 @Target(AnnotationTarget.PROPERTY)
 annotation class XmlString(val stringModifier: KClass<out StringModifier>)
 
 /**
- * This annotation allows a personalization of the [Tag] created from a `class`.
+ * This annotation allows a personalization of the [Tag] created from a `object`.
+ * @property adapter [KClass] of [Adapter] interface that has a function [Adapter.adapt] the returns the personalized [Tag] created from the `object`.
  */
 @Target(AnnotationTarget.CLASS)
 annotation class XmlAdapter(val adapter: KClass<out Adapter>)
