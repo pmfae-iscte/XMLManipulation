@@ -241,7 +241,6 @@ class VisitorAndDocumentTests {
             listOf(componente11, componente12, componente21, componente22, componente23),
             doc.getXMLFragment("fuc/avaliacao/componente")
         )
-        println("Finished")
     }
 
 }

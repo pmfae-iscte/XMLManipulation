@@ -1,10 +1,24 @@
+/**
+ * An object to represent the XML File.
+ * @property [mainTag] The [Tag] that contains all `Tag`s of the document.
+ * @property [version] The `String` corresponding to the version of XML being used.
+ * @property [encoding] The `String` with the enconding to be used to decode the document
+ */
 class Document(private val mainTag: Tag, version: String = "1.0", encoding: String = "UTF-8") {
 
     private val version: Attribute = Attribute("version", version)
     private val encoding: Attribute = Attribute("encoding", encoding)
 
+    /**
+     * Returns the String corresponding to the XML File.
+     */
     fun getXML() = "<?xml $version $encoding?>\n${mainTag.prettyPrint}"
 
+    /**
+     * Returns a list with the tags in the tag specified by the [xpath].
+     *
+     * [xpath] is a `String` composed of a sequence of tags names separated by `/`.
+     */
     fun getXMLFragment(xpath: String): List<Tag> {
         if (xpath == "")
             return listOf(mainTag)
@@ -20,11 +34,14 @@ class Document(private val mainTag: Tag, version: String = "1.0", encoding: Stri
         return list
     }
 
+    /**
+     * Creates the `Attribute` with the [attributeName] and [attributeValue] given and then adds to the Tag or Tags in the Document with the given [tagName].
+     */
     fun addAttribute(
         tagName: String,
         attributeName: String,
         attributeValue: String
-    ) { //Não vê os filhos da tag com o nome dado
+    ) {
         val addAtribute = object : Visitor {
             override fun visit(t: Tag): Boolean {
                 if (t.name == tagName) {
@@ -37,6 +54,9 @@ class Document(private val mainTag: Tag, version: String = "1.0", encoding: Stri
         mainTag.accept(addAtribute)
     }
 
+    /**
+     * Changes the `Tag`'s names where their name equals [oldTagName] to [newTagName].
+     */
     fun renameTag(oldTagName: String, newTagName: String) {
         val renameTag = object : Visitor {
             override fun visit(t: Tag): Boolean {
@@ -49,6 +69,9 @@ class Document(private val mainTag: Tag, version: String = "1.0", encoding: Stri
         mainTag.accept(renameTag)
     }
 
+    /**
+     * Changes the `Attribute` name of the `Tag`'s identified with the given [tagName]. The `Attribute` changed is the one where the name equals to [oldAttributeName] and the new name will be the [newAttributeName] given.
+     */
     fun renameAttribute(tagName: String, oldAttributeName: String, newAttributeName: String) {
         val renameAttribute = object : Visitor {
             val tagStack = mutableListOf<String>()
@@ -71,6 +94,9 @@ class Document(private val mainTag: Tag, version: String = "1.0", encoding: Stri
         mainTag.accept(renameAttribute)
     }
 
+    /**
+     * Removes the `Tag`'s with the given [tagName] from the [Document].
+     */
     fun removeTag(tagName: String) {
         val removeTag = object : Visitor {
             override fun visit(t: Tag): Boolean {
@@ -87,6 +113,9 @@ class Document(private val mainTag: Tag, version: String = "1.0", encoding: Stri
         mainTag.accept(removeTag)
     }
 
+    /**
+     * Removes the `Attribute`'s with the given [attributeName] from the `Tag`'s with the given [tagName] from the [Document].
+     */
     fun removeAttribute(tagName: String, attributeName: String) {
         val removeAttribute = object : Visitor {
             override fun visit(t: Tag): Boolean {
