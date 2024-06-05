@@ -38,7 +38,7 @@ It has features to represent Documents, Tags, Tag inner text, Inner Tags and att
 
 ##### Table of Contents  
 [**XML Manipulation 🤖**](#xml-manipulation-)  
-	[Index](#index)
+	[Index](#index)  
  	[Features 🎨](#features-)  
 ...snip...    
 <a name="headers"/>
