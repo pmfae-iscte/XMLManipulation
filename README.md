@@ -42,7 +42,8 @@ It has features to represent Documents, Tags, Tag inner text, Inner Tags and att
   - [How to use 👣](#how-to-use-)
       - [Example to create a Attribute with class instantiation](#example-to-create-a-attribute-with-class-instantiation)
       - [Examples to create a Document with class instantiation](#examples-to-create-a-document-with-class-instantiation)
-      - [Examples of Documents features:](#examples-of-documents-features)
+      - [Examples of Tags features](#examples-of-tags-features)
+      - [Examples of Documents features](#examples-of-documents-features)
       - [Create Tags from Objects](#create-tags-from-objects)
       - [Create Tags from Objects - Examples](#create-tags-from-objects---examples)
   - [Observations 🔍](#observations-)
@@ -207,7 +208,7 @@ After creation of Tag:
   tag.children//its a list
   ```
 
-#### Examples of Documents features: 
+#### Examples of Documents features
 
 - Get the XML text.
 
