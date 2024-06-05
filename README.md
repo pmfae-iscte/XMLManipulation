@@ -36,6 +36,13 @@ It has features to represent Documents, Tags, Tag inner text, Inner Tags and att
 
 ## Index 
 
+##### Table of Contents  
+[Headers](#headers)  
+[Emphasis](#emphasis)  
+...snip...    
+<a name="headers"/>
+## Headers
+
 [TOC]
 
 
