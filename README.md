@@ -1,6 +1,6 @@
 # XML Manipulation 🤖
 
-[![Use this template](https://img.shields.io/badge/from-XML--Manipulation-brightgreen?logo=dropbox)](https://github.com/pmfae-iscte/XMLManipulation) ![Language](https://img.shields.io/github/languages/top/cortinico/kotlin-android-template?color=blue&logo=kotlin)
+[![Use this template](https://img.shields.io/badge/from-XML--Manipulation-brightgreen?logo=dropbox)](https://github.com/pmfae-iscte/XMLManipulation) ![Language](https://img.shields.io/github/languages/top/pmfae-iscte/XMLManipulation?color=blue&logo=kotlin)
 
 A simple library for XML generation and manipulation.
 
