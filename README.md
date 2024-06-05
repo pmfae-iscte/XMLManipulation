@@ -52,13 +52,10 @@ It has features to represent Documents, Tags, Tag inner text, Inner Tags and att
   - Access a copy of the Attributes.
   - Access a copy of the inner Tags.
 - XML Documents:
-  - Get XML text.
-  - Get Tags according to a xpath given.
-  - Add Attributes to Tags.
-  - Rename Tags.
-  - Rename Attributes.
-  - Remove Tags.
-  - Remove Attributes.
+  - Get the XML text.
+  - Get List of Tags according to a xpath given.
+  - Add/Rename/Remove Attributes of specified Tags from document.
+  - Rename/Remove Tags from document.
 - Creation of Tags from Kotlin Objects using Annotations to define how the Tags are created.
 
 
@@ -183,13 +180,62 @@ After creation of Tag:
   ```
 
 - XML pretty print.
-  [Example](#xml-manipulation-)
+
+  ```kotlin
+  tag.prettyPrint
+  ```
 
 - Access a copy of the Attributes.
 
+  ```kotlin
+  tag.attributes//its a list
+  ```
+
 - Access a copy of the inner Tags.
 
+  ```kotlin
+  tag.children//its a list
+  ```
 
+#### Examples of Documents features: 
+
+- Get the XML text.
+
+  ```kotlin
+  doc.getXML()
+  ```
+
+- Get List of Tags according to a xpath given.
+
+  ```kotlin
+  doc.getXMLFragment("tag1/tag2/tag3")
+  ```
+
+- Add/Rename/Remove Attributes of specified Tags from document.
+
+  ```kotlin
+  doc.addAttribute("tagName", "attributeName", "attributeValue")//adds to all tags with given name
+  ```
+
+  ```kotlin
+  doc.renameAttribute("tagName", "oldAttributeName", "newAttributeName")//rename in all tags with the given name
+  ```
+
+  ```kotlin
+  doc.removeAttribute("tagName", "attributeName")//removes from all tags with the given name
+  ```
+
+- Rename/Remove Tags from document.
+
+  ```kotlin
+  doc.renameTag("oldTagName", "newTagName")//rename all tags with the given name
+  ```
+
+  ```kotlin
+  doc.removeTag("tagName")//removes all tags with the given name
+  ```
+
+  
 
 #### Create Tags from Objects
 
