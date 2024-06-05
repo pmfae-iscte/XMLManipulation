@@ -136,13 +136,13 @@ After creation of Tag:
   ```kotlin
   val a1 = Attribute("name", "value1")
   val a2 = Attribute("name", "value2")
-  tag.addAttribute(a1) //tag will contain Attribute("name", "value1")
+  tag.addAttribute(a1)//tag will contain Attribute("name", "value1")
   ```
 
   ```kotlin
-  tag.setAttribute(a1, a2) //tag will contain Attribute("name", "value2") // names of attributes should be the same
-  tag.setAttribute("name", "value3") //tag will contain Attribute("name", "value3") 
-  tag.setAttribute("name", "name2", "value4") //tag will not contain Attribute("name", "value3") but contain Attribute("name2", "value4")
+  tag.setAttribute(a1, a2) //tag will contain Attribute("name", "value2")// names of attributes should be the same
+  tag.setAttribute("name", "value3")//tag will contain Attribute("name", "value3") 
+  tag.setAttribute("name", "name2", "value4")//tag will not contain Attribute("name", "value3") but contain Attribute("name2", "value4")
   ```
 
   Assuming some attributes where added, including a1 again:
