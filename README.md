@@ -183,7 +183,7 @@ After creation of Tag:
   ```
 
 - XML pretty print.
-  [Example](#din-panel)
+  [Example](#xml-manipulation-)
 
 - Access a copy of the Attributes.
 
