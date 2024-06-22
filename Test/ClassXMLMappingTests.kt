@@ -117,12 +117,7 @@ class ClassXMLMappingTests {
             )
         )
         assertEquals(
-            "<fuc codigo=\"M4310\">\n" +
-                    "\t<nome>Programação Avançada</nome>\n" +
-                    "\t<ects>6.0</ects>\n" +
-                    "\t<componente nome=\"QUIZZES\" peso=\"20%\"/>\n" +
-                    "\t<componente nome=\"PROJETO\" peso=\"80%\"/>\n" +
-                    "</fuc>",
+            "<fuc codigo=\"M4310\">\n" + "\t<nome>Programação Avançada</nome>\n" + "\t<ects>6.0</ects>\n" + "\t<componente nome=\"QUIZZES\" peso=\"20%\"/>\n" + "\t<componente nome=\"PROJETO\" peso=\"80%\"/>\n" + "</fuc>",
             createTag(f).prettyPrint
         )
     }

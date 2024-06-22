@@ -35,7 +35,7 @@ class Document(private val mainTag: Tag, version: String = "1.0", encoding: Stri
     }
 
     /**
-     * Creates the `Attribute` with the [attributeName] and [attributeValue] given and then adds to the Tag or Tags in the Document with the given [tagName].
+     * Adds to the Tag(s) in the Document with the given [tagName] instance(s) of `Attribute`('s) with the [attributeName] and [attributeValue] given.
      */
     fun addAttribute(
         tagName: String,
@@ -88,7 +88,6 @@ class Document(private val mainTag: Tag, version: String = "1.0", encoding: Stri
                 if (tagStack.last() == tagName && a.name == oldAttributeName) {
                     a.name = newAttributeName
                 }
-
             }
         }
         mainTag.accept(renameAttribute)

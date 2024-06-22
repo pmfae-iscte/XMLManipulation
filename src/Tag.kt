@@ -162,7 +162,7 @@ data class Tag(
     }
 
     /**
-     * Removes the `Tag` that has the specified [tagName] from the children of this [Tag] and this [Tag] stops being the removed `Tag` parent.
+     * Removes the first `Tag` that has the specified [tagName] from the children of this [Tag] and this [Tag] stops being the removed `Tag` parent.
      * @return The removed `Tag` if one found, or `null` if none found.
      */
     fun removeTag(tagName: String): Tag? {

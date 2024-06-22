@@ -242,5 +242,4 @@ class VisitorAndDocumentTests {
             doc.getXMLFragment("fuc/avaliacao/componente")
         )
     }
-
 }
